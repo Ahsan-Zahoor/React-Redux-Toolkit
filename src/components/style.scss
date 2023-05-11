@@ -1,0 +1,17 @@
+h2 {
+    color: red;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+  flex-basis: 25%;
+  padding: 10px;
+  box-sizing: border-box;
+  &.product {
+    max-width: 18rem;
+  }
+}
