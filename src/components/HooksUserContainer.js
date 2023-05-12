@@ -3,57 +3,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import CartItemsDropdown from "./CartItemsDropdown";
+
 import {
   fetchProductsData,
-  addToCart,
   setCartProducts,
-} from "./redux/UserActions";
+  addToCart,
+  increment,
+  decrement,
+} from "./redux/UserReducer";
+
 import "./style.scss";
 
 const HooksUserContainer = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products);
-  const cartCount = useSelector((state) => state.cartCount);
-  const cartProducts = useSelector((state) => state.cartProducts);
+  const products = useSelector((state) => state.user.products);
+  const cartCount = useSelector((state) => state.user.cartCount);
+  const cartProducts = useSelector((state) => state.user.cartProducts);
   const [cartDropdown, setCartDropDown] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProductsData());
   }, []);
 
-  const increment = (item) => {
-    let existingProduct = cartProducts.find((i) => i.id === parseInt(item.id));
-    existingProduct.qty += 1;
-    dispatch(setCartProducts(cartProducts));
-  };
-
-  const decrement = (item) => {
-    let existingProduct = cartProducts.find((i) => i.id === parseInt(item.id));
-    // existingProduct.qty === 0
-    // 	? dispatch(setCartProducts(cartProducts.filter((product) => product.id !== item.id)))
-    // 	: (existingProduct.qty -= 1;
-    // 		dispatch(setCartProducts(cartProducts))
-    // 	);
-
-    if (existingProduct.qty === 0) {
-      dispatch(
-        setCartProducts(
-          cartProducts.filter((product) => product.id !== item.id)
-        )
-      );
-    } else {
-      existingProduct.qty -= 1;
-      dispatch(setCartProducts(cartProducts));
-    }
-  };
-
   const addProductsToCart = (product) => {
     if (!cartProducts.some((cartProduct) => cartProduct.id === product.id)) {
-      product.qty = 1;
-      cartProducts.push(product);
-      dispatch(addToCart(cartProducts.length));
+      let temp = { ...product, qty: 1 };
+      dispatch(setCartProducts(temp));
+      dispatch(addToCart(cartProducts.length + 1));
     } else {
-      increment(product);
+      dispatch(increment(product.id));
     }
   };
 

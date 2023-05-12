@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setCartProducts } from "./redux/UserActions";
+import { deleteProduct } from "./redux/UserReducer";
 
 function CartItemsDropdown({ cart, increment, decrement }) {
   const dispatch = useDispatch();
@@ -9,21 +9,15 @@ function CartItemsDropdown({ cart, increment, decrement }) {
     <>
       {cart.map((i) => {
         return (
-          <div>
+          <div key={i.id}>
             <h5 className="card-title">{i.title}</h5>
             <p>Price: {i.price}</p>
             <p>Count: {i.qty}</p>
             <span>
-              <button onClick={() => increment(i)}>Increment</button>
-              <button onClick={() => decrement(i)}>Decrement</button>
+              <button onClick={() => dispatch(increment(i.id))}>+</button>
+              <button onClick={() => dispatch(decrement(i.id))}>-</button>
             </span>
-            <button
-              onClick={() =>
-                dispatch(
-                  setCartProducts(cart.filter((product) => product.id !== i.id))
-                )
-              }
-            >
+            <button onClick={() => dispatch(deleteProduct(i.id))}>
               Delete
             </button>
           </div>
