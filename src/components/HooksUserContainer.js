@@ -16,13 +16,16 @@ import "./style.scss";
 
 const HooksUserContainer = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.user.products);
   const cartCount = useSelector((state) => state.user.cartCount);
   const cartProducts = useSelector((state) => state.user.cartProducts);
   const [cartDropdown, setCartDropDown] = useState(false);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchProductsData());
+    dispatch(fetchProductsData())
+      .unwrap()
+      .then((res) => setProducts(res))
+      .catch((err) => console.log(err));
   }, []);
 
   const addProductsToCart = (product) => {
@@ -52,7 +55,7 @@ const HooksUserContainer = () => {
       </div>
 
       <div className="products">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div className="card" key={product.id}>
             <img className="card-img-top" src={product.image} alt="Card cap" />
             <div className="card-body">

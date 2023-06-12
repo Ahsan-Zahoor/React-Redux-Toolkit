@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./components/redux/store";
 import HooksUserContainer from "./components/HooksUserContainer";
 import ProductDetails from "./components/ProductDetails";
+import Prac from "./components/prac";
 
 function App() {
   return (

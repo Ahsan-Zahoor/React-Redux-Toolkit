@@ -12,9 +12,13 @@ const initialState = {
 
 export const fetchProductsData = createAsyncThunk(
   "products/fetchProducts",
-  async () => {
-    const response = await axios.get("https://fakestoreapi.com/products");
-    return response.data;
+  async (id, thunkAPI) => {
+    try {
+      const response = await axios.get(`https://fakestoreapi.com/products`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
 );
 
@@ -56,9 +60,9 @@ const userSlice = createSlice({
     builder.addCase(fetchProductsData.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchProductsData.fulfilled, (state, action) => {
+    builder.addCase(fetchProductsData.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.products = action.payload;
+      state.products = payload;
     });
     builder.addCase(fetchProductsData.rejected, (state, action) => {
       state.loading = false;
