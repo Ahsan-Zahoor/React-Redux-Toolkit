@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const initialState = {
   loading: false,
@@ -21,6 +22,19 @@ export const fetchProductsData = createAsyncThunk(
     }
   }
 );
+
+export const productsApi = createApi({
+  reducerPath: "productsApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "https://fakestoreapi.com/" }),
+  endpoints: (builder) => ({
+    getAllProducts: builder.query({
+      query: () => "products",
+    }),
+    getProduct: builder.query({
+      query: (id) => `products/${id}`,
+    }),
+  }),
+});
 
 const userSlice = createSlice({
   name: "user",
@@ -72,6 +86,7 @@ const userSlice = createSlice({
   },
 });
 
+export const { useGetAllProductsQuery, useGetProductQuery } = productsApi;
 export const {
   setCartProducts,
   addToCart,

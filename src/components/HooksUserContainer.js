@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import CartItemsDropdown from "./CartItemsDropdown";
-
+import { useGetProductQuery } from "./redux/UserReducer";
 import {
   fetchProductsData,
   setCartProducts,
@@ -16,8 +16,8 @@ import "./style.scss";
 
 const HooksUserContainer = () => {
   const dispatch = useDispatch();
-  const cartCount = useSelector((state) => state.user.cartCount);
-  const cartProducts = useSelector((state) => state.user.cartProducts);
+  const cartCount = useSelector((state) => state.user?.cartCount);
+  const cartProducts = useSelector((state) => state.user?.cartProducts);
   const [cartDropdown, setCartDropDown] = useState(false);
   const [products, setProducts] = useState([]);
 
@@ -37,6 +37,10 @@ const HooksUserContainer = () => {
       dispatch(increment(product.id));
     }
   };
+
+  const { data: getProductData } = useGetProductQuery(5);
+
+  console.log("rtk query: ", getProductData);
 
   return (
     <>
